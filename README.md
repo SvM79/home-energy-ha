@@ -6,8 +6,8 @@ ESP32 + P1 + SMA STP integration med Home Assistant
 
 ## 🎯 Syfte
 
-Samla in och visualisera energidata från elmätare och växelriktare i Home Assistant. Automatisera återbetalningskalkyl utifrån produktionsdata och faktiska elkostnader och inkomst från försäljning.
-Utforska reglerfunktioner för atrypa produktion vid negativa elpriser.
+- **Samla in och visualisera energidata från elmätare och växelriktare i Home Assistant. Automatisera återbetalningskalkyl utifrån produktionsdata och faktiska elkostnader och inkomst från försäljning.
+- **Utforska reglerfunktioner för atrypa produktion vid negativa elpriser.
 ---
 
 ## 🧩 Hårdvara
