@@ -118,7 +118,7 @@ Spotprisdata kommer att integreras i Home Assistant. Det är ännu oklart exakt 
 ### ⛔ Produktion under negativa elpriser (idé/förstudie)
 En framtida möjlighet som undersöks är att minska eller helt stoppa produktionen under negativa elpriser. Detta skulle kunna uppnås genom:
 - Fjärrstyrning av växelriktaren via Modbus (om möjligt)
-- Alternativt lastdump via relä eller annan fysisk styrning
+- Alternativt lastdump via styrning av förbrukare som värmare eller batteri.
 - Automatisk aktivering utifrån Nord Pool-data
 
 Denna funktion kräver både teknisk förstudie och utvärdering av påverkan på garantier och anläggningens livslängd.
