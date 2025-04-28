@@ -1,0 +1,18 @@
+# .gitignore for home-assistant/
+
+# Ignore Home Assistant runtime files
+.storage/
+home-assistant_v2.db
+home-assistant_v2.db-shm
+home-assistant_v2.db-wal
+
+# Ignore secrets
+secrets.yaml
+
+# Ignore backups if you generate them
+*.tar
+
+# Ignore temporary or system files
+*.log
+*.tmp
+*.bak
