@@ -9,20 +9,19 @@ homeassistant:
   time_zone: Europe/Stockholm
 
 modbus:
-  - name: SMA                         # Internal name for this Modbus "hub"
-    tcp:                              # TCP config block (not 'type: tcp' anymore)
-      host: 192.168.10.100            # IP address of your SMA inverter
-      port: 502                       # Default Modbus TCP port
-    delay: 5                          # Delay (seconds) between polling requests (inverter-friendly)
-    timeout: 5                        # Max wait time for a response (seconds)
-    retries: 3                        # Number of retries before giving up on a failed request
+  - name: SMA
+    type: tcp
+    host: 192.168.10.100
+    port: 502
+    delay: 5
+    timeout: 5
+    message_wait_milliseconds: 200
     sensors:
-      - name: SMA Instantaneous Power       # Friendly name of the sensor in Home Assistant
-        slave: 3                            # Modbus Unit ID (default for SMA is usually 3)
-        address: 30775                      # Modbus register: Current AC active power (W)
-        input_type: holding                 # Reading from a holding register
-        count: 2                            # 2 registers = 32-bit value
-        data_type: int32                    # Signed 32-bit integer (can show negative if exporting power)
-        scale: 1                            # No scaling needed (raw value is already in Watts)
-        precision: 0                        # Show as whole number (no decimals)
-        unit_of_measurement: "W"           # Label shown in HA UI
+      - name: SMA Instantaneous Power
+        slave: 3
+        address: 30775
+        input_type: holding
+        data_type: int32
+        scale: 1
+        precision: 0
+        unit_of_measurement: "W"
