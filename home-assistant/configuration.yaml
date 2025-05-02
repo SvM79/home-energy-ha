@@ -1,28 +1,28 @@
 homeassistant:
-  name: Home Energy
-  latitude: !secret home_latitude
+  name: Home Energy                    # Name shown in the Home Assistant UI
+  latitude: !secret home_latitude     # Your location for sun-based automations (stored in secrets.yaml)
   longitude: !secret home_longitude
   elevation: !secret home_elevation
-  unit_system: metric
+  unit_system: metric                 # Metric units (Celsius, meters, etc.)
   currency: SEK
   country: SE
   time_zone: Europe/Stockholm
 
-# Modbus TCP integration to SMA inverter
 modbus:
-  - name: SMA
-    type: tcp
-    host: 192.168.10.100
-    port: 502
-    delay: 5         # Wait 5 seconds between Modbus queries (safe for inverter)
-    timeout: 5       # Timeout if no response in 5s
-    retries: 3       # Retry a few times if query fails
+  - name: SMA                         # Internal name for this Modbus "hub"
+    tcp:                              # TCP config block (not 'type: tcp' anymore)
+      host: 192.168.10.100            # IP address of your SMA inverter
+      port: 502                       # Default Modbus TCP port
+    delay: 5                          # Delay (seconds) between polling requests (inverter-friendly)
+    timeout: 5                        # Max wait time for a response (seconds)
+    retries: 3                        # Number of retries before giving up on a failed request
     sensors:
-      - name: SMA Instantaneous Power
-        slave: 3
-        address: 30775
-        input_type: holding
-        data_type: uint16
-        scale: 1
-        precision: 0
-        unit_of_measurement: "W"
+      - name: SMA Instantaneous Power       # Friendly name of the sensor in Home Assistant
+        slave: 3                            # Modbus Unit ID (default for SMA is usually 3)
+        address: 30775                      # Modbus register: Current AC active power (W)
+        input_type: holding                 # Reading from a holding register
+        count: 2                            # 2 registers = 32-bit value
+        data_type: int32                    # Signed 32-bit integer (can show negative if exporting power)
+        scale: 1                            # No scaling needed (raw value is already in Watts)
+        precision: 0                        # Show as whole number (no decimals)
+        unit_of_measurement: "W"           # Label shown in HA UI
