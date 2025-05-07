@@ -22,6 +22,64 @@ modbus:
         address: 30775
         input_type: holding
         data_type: int32
+        swap: word
         scale: 1
         precision: 0
         unit_of_measurement: "W"
+
+      - name: SMA Total Energy
+        slave: 3
+        address: 30535
+        input_type: holding
+        data_type: uint32
+        swap: word
+        scale: 0.001
+        precision: 1
+        unit_of_measurement: "kWh"
+
+      - name: SMA Grid Frequency
+        slave: 3
+        address: 30783
+        input_type: holding
+        data_type: uint16
+        scale: 0.01
+        precision: 2
+        unit_of_measurement: "Hz"
+
+      - name: SMA Inverter Status
+        slave: 3
+        address: 30201
+        input_type: holding
+        data_type: uint16
+        unit_of_measurement: ""
+
+template:
+  - sensor:
+      - name: Net Power Flow
+        unit_of_measurement: "W"
+        state_class: measurement
+        device_class: power
+        icon: mdi:flash
+        state: >
+          {% set delivered = states('sensor.p1_power_delivered') | float(0) %}
+          {% set returned = states('sensor.p1_power_returned') | float(0) %}
+          {{ (delivered - returned) | round(1) }}
+
+      - name: Estimated Self Consumption
+        unit_of_measurement: "W"
+        state_class: measurement
+        device_class: power
+        state: >
+          {% set production = states('sensor.sma_instantaneous_power') | float(0) %}
+          {% set export = states('sensor.p1_power_returned') | float(0) %}
+          {{ [production - export, 0] | max | round(1) }}
+
+      - name: Solar Autonomy
+        unit_of_measurement: "%"
+        state_class: measurement
+        device_class: battery
+        state: >
+          {% set prod = states('sensor.sma_instantaneous_power') | float(0) %}
+          {% set import = states('sensor.p1_power_delivered') | float(0) %}
+          {% set usage = prod + import %}
+          {{ (prod / usage * 100) | round(1) if usage > 0 else 0 }}
