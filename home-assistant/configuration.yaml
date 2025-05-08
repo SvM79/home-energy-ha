@@ -83,3 +83,22 @@ template:
           {% set import = states('sensor.p1_power_delivered') | float(0) %}
           {% set usage = prod + import %}
           {{ (prod / usage * 100) | round(1) if usage > 0 else 0 }}
+mobile_app:
+  push:
+    ios:
+      categories:
+        - name: Home Energy
+          identifier: home_energy
+          actions:
+            - identifier: view
+              title: View
+              activation_mode: background
+              authentication_required: false
+              destructive: false
+              behavior: default
+            - identifier: ignore
+              title: Ignore
+              activation_mode: background
+              authentication_required: false
+              destructive: true
+              behavior: default
