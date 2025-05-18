@@ -29,28 +29,20 @@ modbus:
 
       - name: SMA Total Energy
         slave: 3
-        address: 30535
+        address: 30513
         input_type: holding
-        data_type: uint32
+        data_type: uint64
         swap: word
         scale: 0.001
-        precision: 1
+        precision: 3
         unit_of_measurement: "kWh"
 
-      - name: SMA Grid Frequency
-        slave: 3
-        address: 30783
-        input_type: holding
-        data_type: uint16
-        scale: 0.01
-        precision: 2
-        unit_of_measurement: "Hz"
-
-      - name: SMA Inverter Status
+      - name: SMA Current State of Health
         slave: 3
         address: 30201
         input_type: holding
-        data_type: uint16
+        data_type: uint32
+        swap: word
         unit_of_measurement: ""
 
 template:
@@ -61,42 +53,31 @@ template:
         device_class: power
         icon: mdi:flash
         state: >
-          {% set delivered = states('sensor.p1_power_delivered') %}
-          {% set returned = states('sensor.p1_power_returned') %}
-          {% if delivered in ['unavailable', 'unknown'] or returned in ['unavailable', 'unknown'] %}
-            0
-          {% else %}
-            {{ (delivered | float(0) - returned | float(0)) | round(1) }}
-          {% endif %}
+          {% set delivered = states('sensor.p1_dongle_pro_power_consumed') | default('0') | float(0) %}
+          {% set returned = states('sensor.p1_dongle_pro_power_produced') | default('0') | float(0) %}
+          {{ (delivered - returned) | round(1) }}
 
       - name: Estimated Self Consumption
         unit_of_measurement: "W"
         state_class: measurement
         device_class: power
+        icon: mdi:home-lightning-bolt-outline
         state: >
-          {% set production = states('sensor.sma_instantaneous_power') %}
-          {% set export = states('sensor.p1_power_returned') %}
-          {% if production in ['unavailable', 'unknown'] or export in ['unavailable', 'unknown'] %}
-            0
-          {% else %}
-            {{ [production | float(0) - export | float(0), 0] | max | round(1) }}
-          {% endif %}
+          {% set production = states('sensor.sma_instantaneous_power') | default('0') | float(0) %}
+          {% set export = states('sensor.p1_dongle_pro_power_produced') | default('0') | float(0) %}
+          {{ [production - export, 0] | max | round(1) }}
 
       - name: Solar Autonomy
         unit_of_measurement: "%"
         state_class: measurement
         device_class: battery
+        icon: mdi:percent
         state: >
-          {% set prod = states('sensor.sma_instantaneous_power') %}
-          {% set import = states('sensor.p1_power_delivered') %}
-          {% if prod in ['unavailable', 'unknown'] or import in ['unavailable', 'unknown'] %}
-            0
-          {% else %}
-            {% set prod_f = prod | float(0) %}
-            {% set import_f = import | float(0) %}
-            {% set usage = prod_f + import_f %}
-            {{ (prod_f / usage * 100) | round(1) if usage > 0 else 0 }}
-          {% endif %}
+          {% set prod = states('sensor.sma_instantaneous_power') | default('0') | float(0) %}
+          {% set import_ = states('sensor.p1_dongle_pro_power_consumed') | default('0') | float(0) %}
+          {% set usage = prod + import_ %}
+          {{ (prod / usage * 100) | round(1) if usage > 0 else 0 }}
+
 mobile_app:
   push:
     ios:
