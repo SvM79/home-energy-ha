@@ -1,8 +1,8 @@
 # home-energy-ha
-ESP32 + P1 + SMA STP integration med Home Assistant
+P1 Dongle Pro + SMA STP integration med Home Assistant
 
 # ⚡ Home Assistant Energy Integration  
-**Atom Lite + P1 + SMA Sunny Tripower + Automatiserad återbetalning**
+**P1 Dongle Pro + SMA Sunny Tripower + Automatiserad återbetalning**
 
 ## 🎯 Syfte
 
@@ -14,12 +14,11 @@ ESP32 + P1 + SMA STP integration med Home Assistant
 
 - **HP Laptop**
 - **Synology NAS**
-- **Atom Lite ESP32**
+- **P1 Dongle Pro (med extern strömförsörjning och passiv RJ12-splitter)**
 - **P1/HAN-port** 
 - **SMA STP 8.0 växelriktare** (via Modbus TCP)
 - **RJ12-RJ45 kabel** 
 - **RJ45 adapter (hona till lödningsfri kontakt)**
-- **Grove kabel**
 
 ---
 
@@ -39,7 +38,7 @@ ESP32 + P1 + SMA STP integration med Home Assistant
 
 ## 🏠 Home Assistant Integration
 
-- `ESPHome` för Atom Lite (P1-avläsning)
+- `ESPHome` för(P1-avläsning)
 - `modbus:` i `configuration.yaml` för SMA
 - Egna `template:`-sensorer:
   - Självförsörjningsgrad
@@ -90,14 +89,10 @@ ESP32 + P1 + SMA STP integration med Home Assistant
 - [X] Projektplanering
 - [X] Hårdvarubeställning
 - [X] Repo och mappar VS Code, Github
-- [ ] Hårdvaruleverans (AliExpress)
-- [ ] Flashning ESP32
-- [ ] Kabelinstallation
-- [ ] ESPHome konfigurerat för P1
-- [ ] Modbus-uppkoppling mot SMA testad
-- [ ] Sensorer skapade i HA
-- [ ] MQTT eller REST push testad
-- [ ] Dashboard påbörjad
+- [X] ESPHome konfigurerat för P1
+- [X] Modbus-uppkoppling mot SMA testad
+- [X] Sensorer skapade i HA
+- [X] Dashboard påbörjad
 
 
 ---
